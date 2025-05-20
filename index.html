@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Математика для детей</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-green-200">
+  <div class="min-h-screen p-2 sm:p-4 flex flex-col items-center bg-gradient-to-b from-blue-200 to-green-200">
+    <!-- Кнопки уровней -->
+    <div class="grid gap-4 mb-4" id="level-buttons">
+      <button class="px-4 py-2 rounded-full text-white font-bold bg-blue-600 hover:bg-blue-500 transition-transform transform hover:scale-105" data-level="1">Уровень 1</button>
+      <button class="px-4 py-2 rounded-full text-white font-bold bg-blue-400 hover:bg-blue-500 transition-transform transform hover:scale-105" data-level="2">Уровень 2</button>
+      <button class="px-4 py-2 rounded-full text-white font-bold bg-blue-400 hover:bg-blue-500 transition-transform transform hover:scale-105" data-level="3">Уровень 3</button>
+      <button class="px-4 py-2 rounded-full text-white font-bold bg-blue-400 hover:bg-blue-500 transition-transform transform hover:scale-105" data-level="4">Уровень 4</button>
+      <button class="px-4 py-2 rounded-full text-white font-bold bg-blue-400 hover:bg-blue-500 transition-transform transform hover:scale-105" data-level="5">Уровень 5</button>
+    </div>
+
+    <!-- Кнопка и модальное окно FAQ -->
+    <div id="faq-button" class="absolute top-4 left-4 text-2xl cursor-pointer">❓</div>
+    <div id="faq-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white p-6 rounded-lg max-w-md w-full">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-2xl font-bold">О игре</h2>
+          <span id="faq-close" class="text-xl cursor-pointer">✖</span>
+        </div>
+        <p class="mb-2"><strong>Уровень 1:</strong> Простые примеры (1–10), сложение и вычитание.</p>
+        <p class="mb-2"><strong>Уровень 2:</strong> Числа 1–20, разложение второго числа.</p>
+        <p class="mb-2"><strong>Уровень 3:</strong> Три числа, разложение второго числа.</p>
+        <p class="mb-2"><strong>Уровень 4:</strong> Числа 1–20, разложение для перехода через 10.</p>
+        <p class="mb-2"><strong>Уровень 5:</strong> Три числа, разложение второго числа.</p>
+        <p class="mb-2"><strong>Механика:</strong> Правильный: +5 ⭐, урон врагу (уровень × 2, крит ×4 каждые 5 ответов). Неправильный: -1 ⭐, -5 HP. Победа: +20 ⭐ (босс +30 ⭐, +HP).</p>
+        <p class="mb-2"><strong>Враги:</strong> 🦇 (все уровни), 🐍 (все уровни), 🦁 (2+), 🐉 (2+), 👹 (2+, босс).</p>
+        <p class="mb-2"><strong>Статистика:</strong> Правильных: <span id="correct-count">0</span>, Неправильных: <span id="incorrect-count">0</span>, Звёзд: <span id="star-total">0</span></p>
+        <p class="mt-4"><strong>Новая игра:</strong> Код <code>250989</code> для сброса.</p>
+      </div>
+    </div>
+
+    <!-- Модальное окно "Игра окончена" -->
+    <div id="game-over-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white p-6 rounded-lg max-w-md w-full text-center">
+        <h2 class="text-2xl font-bold mb-4">Игра окончена 😿</h2>
+        <p class="mb-4">Ваши HP закончились! Прогресс сброшен.</p>
+        <button id="restart-game" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500">Начать заново</button>
+      </div>
+    </div>
+
+    <!-- Счётчик звёзд -->
+    <div id="star-count" class="absolute top-4 right-4 text-2xl font-bold">⭐ 0</div>
+
+    <!-- Отображение врага -->
+    <div id="enemy" class="absolute flex flex-col items-center">
+      <span id="enemy-emoji" class="text-4xl">🦇</span>
+      <div class="w-24 bg-gray-200 rounded-full h-4 mt-1">
+        <div id="enemy-hp" class="bg-red-500 h-4 rounded-full" style="width: 100%"></div>
+      </div>
+    </div>
+
+    <!-- Отображение игрока -->
+    <div id="player" class="absolute flex flex-col items-center">
+      <span id="player-emoji" class="text-4xl">🧙‍♂️</span>
+      <div class="w-24 bg-gray-200 rounded-full h-4 mt-1">
+        <div id="hero-hp" class="bg-green-500 h-4 rounded-full" style="width: 100%"></div>
+      </div>
+    </div>
+
+    <!-- Персонаж: котик -->
+    <div id="cat" class="text-6xl mb-4">😺</div>
+
+    <!-- Математический пример -->
+    <div id="example" class="text-4xl font-bold mb-4" style="font-size: 36px;"></div>
+
+    <!-- Поле для ответа -->
+    <div id="answer" class="text-2xl mt-8 mb-4">Ответ: </div>
+
+    <!-- Виртуальная клавиатура -->
+    <div class="grid grid-cols-3 gap-2 w-80" id="input-buttons">
+      <button class="bg-yellow-400 hover:bg-yellow-500 text-3xl font-bold p-6 rounded-lg transition-transform transform hover:scale-105">1</button>
+      <button class="bg-yellow-400 hover:bg-yellow-500 text-3xl font-bold p-6 rounded-lg transition-transform transform hover:scale-105">2</button>
+      <button class="bg-yellow-400 hover:bg-yellow-500 text-3xl font-bold p-6 rounded-lg transition-transform transform hover:scale-105">3</button>
+      <button class="bg-yellow-400 hover:bg-yellow-500 text-3xl font-bold p-6 rounded-lg transition-transform transform hover:scale-105">4</button>
+      <button class="bg-yellow-400 hover:bg-yellow-500 text-3xl font-bold p-6 rounded-lg transition-transform transform hover:scale-105">5</button>
+      <button class="bg-yellow-400 hover:bg-yellow-500 text-3xl font-bold p-6 rounded-lg transition-transform transform hover:scale-105">6</button>
+      <button class="bg-yellow-400 hover:bg-yellow-500 text-3xl font-bold p-6 rounded-lg transition-transform transform hover:scale-105">7</button>
+      <button class="bg-yellow-400 hover:bg-yellow-500 text-3xl font-bold p-6 rounded-lg transition-transform transform hover:scale-105">8</button>
+      <button class="bg-yellow-400 hover:bg-yellow-500 text-3xl font-bold p-6 rounded-lg transition-transform transform hover:scale-105">9</button>
+      <button class="bg-yellow-400 hover:bg-yellow-500 text-3xl font-bold p-6 rounded-lg transition-transform transform hover:scale-105">0</button>
+      <button id="submit" class="bg-green-500 hover:bg-green-600 text-white text-2xl font-bold p-6 rounded-lg transition-transform transform hover:scale-105 flex justify-center items-center">Ввод</button>
+      <button id="clear" class="bg-red-500 hover:bg-red-600 text-white text-xl font-bold p-6 rounded-lg transition-transform transform hover:scale-105 flex justify-center items-center">Очистить</button>
+    </div>
+
+    <!-- Аудио для звуков (закомментировано для будущей интеграции) -->
+    <!--
+    <audio id="hit-sound" src="path/to/hit.mp3"></audio>
+    <audio id="crit-sound" src="path/to/crit.mp3"></audio>
+    <audio id="victory-sound" src="path/to/victory.mp3"></audio>
+    -->
+  </div>
+
+  <script src="game.js"></script>
+  <script>
+    // Инициализация при загрузке страницы
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeGame();
+    });
+
+    // Обновление позиций при ресайзе окна
+    window.addEventListener('resize', () => {
+      positionBrace();
+      updateButtonLayout();
+      positionCharacters();
+    });
+  </script>
+</body>
+</html>
