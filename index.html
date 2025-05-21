@@ -53,15 +53,17 @@
     <div class="flex items-center justify-center w-full mt-8 mb-4">
       <div class="flex flex-col items-center mr-4">
         <div id="enemy" class="text-4xl mb-2">🦁</div>
-        <div id="enemy-hp" class="w-20 h-4 bg-gray-300 rounded-full overflow-hidden">
+        <div id="enemy-hp" class="w-20 h-4 bg-gray-300 rounded-full overflow-hidden relative">
           <div id="enemy-hp-bar" class="h-full bg-red-500" style="width: 100%;"></div>
+          <span id="enemy-hp-text" class="absolute inset-0 text-xs text-white font-bold flex items-center justify-center">80/80</span>
         </div>
       </div>
       <div id="answer" class="text-2xl mx-4 w-32 text-center">Ответ: </div>
       <div class="flex flex-col items-center ml-4">
         <div id="player" class="text-4xl mb-2">🐶</div>
-        <div id="player-hp" class="w-20 h-4 bg-gray-300 rounded-full overflow-hidden">
+        <div id="player-hp" class="w-20 h-4 bg-gray-300 rounded-full overflow-hidden relative">
           <div id="player-hp-bar" class="h-full bg-green-500" style="width: 100%;"></div>
+          <span id="player-hp-text" class="absolute inset-0 text-xs text-white font-bold flex items-center justify-center">100/100</span>
         </div>
       </div>
     </div>
@@ -76,8 +78,10 @@
       <button class="bg-yellow-400 hover:bg-yellow-500 text-3xl font-bold p-4 rounded-lg transition-transform transform hover:scale-105">8</button>
       <button class="bg-yellow-400 hover:bg-yellow-500 text-3xl font-bold p-4 rounded-lg transition-transform transform hover:scale-105">9</button>
       <button class="bg-yellow-400 hover:bg-yellow-500 text-3xl font-bold p-4 rounded-lg transition-transform transform hover:scale-105">0</button>
-      <button id="submit" class="bg-green-500 hover:bg-green-600 text-2xl font-bold p-4 rounded-lg transition-transform transform hover:scale-105 flex justify-center items-center">Ввод</button>
-      <button id="clear" class="bg-red-500 hover:bg-red-600 text-xl font-bold p-4 rounded-lg transition-transform transform hover:scale-105 flex justify-center items-center">Очистить</button>
+      <button id="submit"
+        class="bg-green-500 hover:bg-green-600 text-white text-xl font-bold p-6 rounded-lg transition-transform transform hover:scale-105 flex justify-center items-center">Ввод</button>
+      <button id="clear"
+        class="bg-red-500 hover:bg-red-600 text-white text-xl font-bold p-6 rounded-lg transition-transform transform hover:scale-105 flex justify-center items-center">Очистить</button>
     </div>
   </div>
 
@@ -97,14 +101,18 @@
     let correctAnswers = parseInt(localStorage.getItem('correctAnswers')) || 0;
     let incorrectAnswers = parseInt(localStorage.getItem('incorrectAnswers')) || 0;
     let maxStars = parseInt(localStorage.getItem('maxStars')) || 0;
-    const playerAvatars = ['🐶', '🐱', '🐰', '🦝', '🐸', '🕷️'];
+    const playerAvatars = ['🐶', '🐱', '🐰', '🦝', '🐸'];
     const enemies = [
-      { emoji: '🦝', baseHP: 80 },
+      { emoji: '🦁', baseHP: 80 },
       { emoji: '🐺', baseHP: 100 },
       { emoji: '🐻', baseHP: 120 },
       { emoji: '🦊', baseHP: 90 },
       { emoji: '🐍', baseHP: 150 }
     ];
+
+    function debugLog(action) {
+      console.log(`[${action}] Player HP: ${playerHP}, Enemy: ${enemies[currentEnemyIndex].emoji} HP: ${enemyHP}/${Math.round(enemies[currentEnemyIndex].baseHP * enemyHPMultiplier)}, Damage: ${action === 'Correct' ? (correctCount >= 7 ? 2 * (10 + 5 * level) : 10 + 5 * level) : 10}, Enemy Index: ${currentEnemyIndex}, Multiplier: ${enemyHPMultiplier.toFixed(1)}, Stars: ${stars}, Correct: ${correctAnswers}, Incorrect: ${incorrectAnswers}, Max Stars: ${maxStars}`);
+    }
 
     function generateExample() {
       let num1, num2, num3, op1, op2, result, decomposition;
@@ -256,7 +264,9 @@
       document.getElementById('star-number').textContent = '0';
       document.getElementById('crit-counter').textContent = '😸 0/7';
       document.getElementById('player-hp-bar').style.width = '100%';
+      document.getElementById('player-hp-text').textContent = '100/100';
       document.getElementById('enemy-hp-bar').style.width = '100%';
+      document.getElementById('enemy-hp-text').textContent = `${enemyHP}/${Math.round(enemies[currentEnemyIndex].baseHP * enemyHPMultiplier)}`;
       document.getElementById('cat').textContent = '😺';
       document.getElementById('correct-stats').textContent = correctAnswers;
       document.getElementById('incorrect-stats').textContent = incorrectAnswers;
@@ -271,6 +281,7 @@
       codeInput = '';
       answer = '';
       document.getElementById('answer').textContent = 'Ответ: ';
+      debugLog('Reset');
       const avatarModal = document.getElementById('avatar-modal');
       const avatarOptions = document.getElementById('avatar-options');
       avatarOptions.innerHTML = '';
@@ -382,11 +393,10 @@
             correctCount = 0;
           }
           document.getElementById('crit-counter').textContent = `😸 ${correctCount}/7`;
-          console.log(`Damage: ${damage}, Enemy HP before: ${enemyHP}`);
           enemyHP = Math.max(0, enemyHP - damage);
-          console.log(`Enemy HP after: ${enemyHP}`);
           localStorage.setItem('enemyHP', enemyHP);
           document.getElementById('enemy-hp-bar').style.width = `${(enemyHP / (enemies[currentEnemyIndex].baseHP * enemyHPMultiplier)) * 100}%`;
+          document.getElementById('enemy-hp-text').textContent = `${enemyHP}/${Math.round(enemies[currentEnemyIndex].baseHP * enemyHPMultiplier)}`;
           gsap.to('#enemy', {
             x: '+=5',
             y: -5,
@@ -421,6 +431,7 @@
             localStorage.setItem('currentEnemyIndex', currentEnemyIndex);
             document.getElementById('enemy').textContent = enemies[currentEnemyIndex].emoji;
             document.getElementById('enemy-hp-bar').style.width = '100%';
+            document.getElementById('enemy-hp-text').textContent = `${enemyHP}/${Math.round(enemies[currentEnemyIndex].baseHP * enemyHPMultiplier)}`;
             gsap.to('#enemy', { opacity: 0, duration: 0.3, onComplete: () => {
               gsap.to('#enemy', { opacity: 1, duration: 0.3 });
             }});
@@ -430,6 +441,7 @@
               playerHP = Math.min(100, playerHP + 5);
               localStorage.setItem('playerHP', playerHP);
               document.getElementById('player-hp-bar').style.width = `${playerHP}%`;
+              document.getElementById('player-hp-text').textContent = `${playerHP}/100`;
               showBonus('player', 5, 'green');
               stars += 10;
               maxStars = Math.max(maxStars, stars);
@@ -437,8 +449,10 @@
               localStorage.setItem('maxStars', maxStars);
               document.getElementById('star-number').textContent = stars;
               document.getElementById('max-stars-stats').textContent = maxStars;
+              debugLog('Cycle');
             }
           }
+          debugLog('Correct');
           answer = '';
           codeInput = '';
           document.getElementById('answer').textContent = 'Ответ: ';
@@ -454,6 +468,7 @@
           playerHP = Math.max(0, playerHP - damage);
           localStorage.setItem('playerHP', playerHP);
           document.getElementById('player-hp-bar').style.width = `${playerHP}%`;
+          document.getElementById('player-hp-text').textContent = `${playerHP}/100`;
           gsap.to('#player', {
             x: '+=5',
             y: -5,
@@ -483,6 +498,7 @@
           if (playerHP <= 0) {
             resetGame();
           }
+          debugLog('Incorrect');
           answer = '';
           codeInput = '';
           document.getElementById('answer').textContent = 'Ответ: ';
@@ -548,12 +564,15 @@
       document.getElementById('crit-counter').textContent = '😸 0/7';
       document.getElementById('player').textContent = playerAvatar;
       document.getElementById('player-hp-bar').style.width = `${playerHP}%`;
+      document.getElementById('player-hp-text').textContent = `${playerHP}/100`;
       document.getElementById('enemy-hp-bar').style.width = `${(enemyHP / (enemies[currentEnemyIndex].baseHP * enemyHPMultiplier)) * 100}%`;
+      document.getElementById('enemy-hp-text').textContent = `${enemyHP}/${Math.round(enemies[currentEnemyIndex].baseHP * enemyHPMultiplier)}`;
       document.getElementById('correct-stats').textContent = correctAnswers;
       document.getElementById('incorrect-stats').textContent = incorrectAnswers;
       document.getElementById('max-stars-stats').textContent = maxStars;
       updateExample();
       updateButtonLayout();
+      debugLog('Init');
     });
 
     window.addEventListener('resize', () => {
