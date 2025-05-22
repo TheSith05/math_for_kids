@@ -35,6 +35,7 @@
         <p>Правильных ответов: <span id="correct-stats">0</span></p>
         <p>Неправильных ответов: <span id="incorrect-stats">0</span></p>
         <p>Максимум звёзд: <span id="max-stars-stats">0</span></p>
+        <p>Всего заработано звёзд: <span id="total-stars-stats">0</span></p>
         <p class="mt-4"><strong>Новая игра:</strong> Введите код <code>250989</code> и нажмите "Ввод" для сброса прогресса.</p>
       </div>
     </div>
@@ -87,6 +88,7 @@
     <div id="star-count" class="absolute top-4 right-4 flex flex-col items-center">
       <span class="text-2xl">⭐</span>
       <span id="star-number" class="text-xl font-bold">0</span>
+      <span id="game-level" class="text-xl font-bold">lvl 1</span>
     </div>
     <div class="flex items-center justify-center mb-4 relative">
       <div id="hint" class="hidden text-xl font-bold text-blue-600 absolute" style="left: calc(50% - 200px); text-align: left; max-width: 120px;"></div>
@@ -135,12 +137,14 @@
     let answer = '';
     let codeInput = '';
     let stars = parseInt(localStorage.getItem('stars')) || 0;
+    let totalStarsEarned = parseInt(localStorage.getItem('totalStarsEarned')) || 0;
     let correctCount = 0;
     let streak = 0;
     let playerHP = parseInt(localStorage.getItem('playerHP')) || 100;
     let enemyHP = parseInt(localStorage.getItem('enemyHP')) || 80;
     let enemyHPMultiplier = parseFloat(localStorage.getItem('enemyHPMultiplier')) || 1.0;
     let currentEnemyIndex = parseInt(localStorage.getItem('currentEnemyIndex')) || 0;
+    let gameLevel = parseInt(localStorage.getItem('gameLevel')) || 1;
     let playerAvatar = localStorage.getItem('playerAvatar') || '🐶';
     let catAvatar = localStorage.getItem('catAvatar') || '😺';
     let correctAnswers = parseInt(localStorage.getItem('correctAnswers')) || 0;
@@ -148,15 +152,15 @@
     let maxStars = parseInt(localStorage.getItem('maxStars')) || 0;
     let incorrectAttempts = 0;
     let emotionMode = localStorage.getItem('emotionMode') === 'true';
-    let emotionSet = parseInt(localStorage.getItem('emotionSet')) || 0; // 0: без эмоций, 1: первый набор, 2: второй
-    const playerAvatars = ['👧', '🦸', '🐰', '🦝', '🐇', '🕷️', '👸', '🦖', '👦', '🦸‍♀️'];
+    let emotionSet = parseInt(localStorage.getItem('emotionSet')) || 0;
+    const playerAvatars = ['🐶', '🐱', '🐰', '🦝', '🐸', '🕷️'];
     const catHeroes = ['😺', '🦁', '🐼', '🦄', '👸', '🦂', '🧙'];
     const enemies = [
       { emoji: '🦝', baseHP: 80 },
       { emoji: '🐺', baseHP: 100 },
       { emoji: '🐻', baseHP: 120 },
       { emoji: '🦊', baseHP: 90 },
-      { emoji: '🐍', baseHP: 150 }
+      { emoji: '🦍', baseHP: 150 }
     ];
 
     function debounce(func, wait) {
@@ -402,12 +406,15 @@
 
     function resetGame() {
       localStorage.setItem('maxStars', maxStars);
+      localStorage.setItem('totalStarsEarned', totalStarsEarned);
       stars = 0;
+      totalStarsEarned = 0;
       correctCount = 0;
       streak = 0;
       playerHP = 100;
       enemyHP = enemies[0].baseHP;
       currentEnemyIndex = 0;
+      gameLevel = 1;
       enemyHPMultiplier = 1.0;
       correctAnswers = 0;
       incorrectAnswers = 0;
@@ -417,9 +424,11 @@
       catAvatar = '😺';
       examplesByLevel = {};
       localStorage.setItem('stars', stars);
+      localStorage.setItem('totalStarsEarned', totalStarsEarned);
       localStorage.setItem('playerHP', playerHP);
       localStorage.setItem('enemyHP', enemyHP);
       localStorage.setItem('currentEnemyIndex', currentEnemyIndex);
+      localStorage.setItem('gameLevel', gameLevel);
       localStorage.setItem('enemyHPMultiplier', enemyHPMultiplier);
       localStorage.setItem('correctAnswers', correctAnswers);
       localStorage.setItem('incorrectAnswers', incorrectAnswers);
@@ -430,6 +439,7 @@
       document.getElementById('enemy').textContent = enemies[currentEnemyIndex].emoji;
       document.getElementById('cat').textContent = catAvatar;
       document.getElementById('star-number').textContent = '0';
+      document.getElementById('game-level').textContent = `lvl ${gameLevel}`;
       document.getElementById('crit-counter').textContent = '⚡ 0/7';
       document.getElementById('player-hp-bar').style.width = '100%';
       document.getElementById('enemy-hp-bar').style.width = '100%';
@@ -437,6 +447,7 @@
       document.getElementById('correct-stats').textContent = correctAnswers;
       document.getElementById('incorrect-stats').textContent = incorrectAnswers;
       document.getElementById('max-stars-stats').textContent = maxStars;
+      document.getElementById('total-stars-stats').textContent = totalStarsEarned;
       updateHPText();
       gsap.to('#cat', {
         scale: 1.5,
@@ -634,6 +645,7 @@
           let starReward = level <= 2 ? 1 : level <= 4 ? 2 : 3;
           if (correctCount >= 7) {
             starReward += 5;
+            totalStarsEarned += 5;
             if (emotionMode) {
               showEmotion('crit', false, true);
             } else {
@@ -666,11 +678,14 @@
           });
           showDamage('enemy', damage, color);
           stars += starReward;
+          totalStarsEarned += starReward;
           maxStars = Math.max(maxStars, stars);
           localStorage.setItem('stars', stars);
+          localStorage.setItem('totalStarsEarned', totalStarsEarned);
           localStorage.setItem('maxStars', maxStars);
           document.getElementById('star-number').textContent = stars;
           document.getElementById('max-stars-stats').textContent = maxStars;
+          document.getElementById('total-stars-stats').textContent = totalStarsEarned;
           gsap.to('#star-count', { scale: 1.2, duration: 0.3, yoyo: true, repeat: 1 });
           if (enemyHP <= 0) {
             currentEnemyIndex = (currentEnemyIndex + 1) % enemies.length;
@@ -684,19 +699,25 @@
               gsap.to('#enemy', { opacity: 1, duration: 0.3 });
             }});
             if (currentEnemyIndex === 0) {
+              gameLevel++;
               enemyHPMultiplier += 0.1;
               localStorage.setItem('enemyHPMultiplier', enemyHPMultiplier);
+              localStorage.setItem('gameLevel', gameLevel);
+              document.getElementById('game-level').textContent = `lvl ${gameLevel}`;
               playerHP = Math.min(100, playerHP + 5);
               localStorage.setItem('playerHP', playerHP);
               document.getElementById('player-hp-bar').style.width = `${playerHP}%`;
               document.getElementById('player-hp-text').textContent = `${playerHP}/100`;
               showBonus('player', 5, 'green');
               stars += 10;
+              totalStarsEarned += 10;
               maxStars = Math.max(maxStars, stars);
               localStorage.setItem('stars', stars);
+              localStorage.setItem('totalStarsEarned', totalStarsEarned);
               localStorage.setItem('maxStars', maxStars);
               document.getElementById('star-number').textContent = stars;
               document.getElementById('max-stars-stats').textContent = maxStars;
+              document.getElementById('total-stars-stats').textContent = totalStarsEarned;
             }
           }
           answer = '';
@@ -779,6 +800,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       if (!localStorage.getItem('playerAvatar')) resetGame();
       document.getElementById('star-number').textContent = stars;
+      document.getElementById('game-level').textContent = `lvl ${gameLevel}`;
       document.getElementById('enemy').textContent = enemies[currentEnemyIndex].emoji;
       document.getElementById('cat').textContent = catAvatar;
       document.getElementById('crit-counter').textContent = '⚡ 0/7';
@@ -788,6 +810,7 @@
       document.getElementById('correct-stats').textContent = correctAnswers;
       document.getElementById('incorrect-stats').textContent = incorrectAnswers;
       document.getElementById('max-stars-stats').textContent = maxStars;
+      document.getElementById('total-stars-stats').textContent = totalStarsEarned;
       updateHPText();
       updateExample();
     });
