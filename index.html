@@ -9,14 +9,15 @@
 </head>
 <body class="bg-green-200">
   <div class="min-h-screen p-2 sm:p-4 flex flex-col items-center bg-gradient-to-b from-blue-200 to-green-200">
-    <div class="grid gap-4 mb-4" id="level-buttons">
-      <button class="px-4 py-2 rounded-full text-white font-bold bg-blue-600 hover:bg-blue-500 transition-transform transform hover:scale-105" data-level="1">Уровень 1</button>
-      <button class="px-4 py-2 rounded-full text-white font-bold bg-blue-400 hover:bg-blue-500 transition-transform transform hover:scale-105" data-level="2">Уровень 2</button>
-      <button class="px-4 py-2 rounded-full text-white font-bold bg-blue-400 hover:bg-blue-500 transition-transform transform hover:scale-105" data-level="3">Уровень 3</button>
-      <button class="px-4 py-2 rounded-full text-white font-bold bg-blue-400 hover:bg-blue-500 transition-transform transform hover:scale-105" data-level="4">Уровень 4</button>
-      <button class="px-4 py-2 rounded-full text-white font-bold bg-blue-400 hover:bg-blue-500 transition-transform transform hover:scale-105" data-level="5">Уровень 5</button>
+    <div id="level-buttons" class="flex gap-2 mb-4">
+      <button class="w-10 h-10 rounded-full text-white font-bold bg-blue-600 hover:bg-blue-500 transition-transform transform hover:scale-105" data-level="1">1</button>
+      <button class="w-10 h-10 rounded-full text-white font-bold bg-blue-400 hover:bg-blue-500 transition-transform transform hover:scale-105" data-level="2">2</button>
+      <button class="w-10 h-10 rounded-full text-white font-bold bg-blue-400 hover:bg-blue-500 transition-transform transform hover:scale-105" data-level="3">3</button>
+      <button class="w-10 h-10 rounded-full text-white font-bold bg-blue-400 hover:bg-blue-500 transition-transform transform hover:scale-105" data-level="4">4</button>
+      <button class="w-10 h-10 rounded-full text-white font-bold bg-blue-400 hover:bg-blue-500 transition-transform transform hover:scale-105" data-level="5">5</button>
     </div>
     <div id="faq-button" class="absolute top-4 left-4 text-2xl cursor-pointer">❓</div>
+    <div id="shop-button" class="absolute top-4 left-12 text-2xl cursor-pointer">🛒</div>
     <div id="faq-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white p-6 rounded-lg max-w-md w-full">
         <div class="flex justify-between items-center mb-4">
@@ -28,11 +29,54 @@
         <p class="mb-2"><strong>Уровень 3:</strong> Три числа (1–20, 1–10), два оператора, разложение второго числа.</p>
         <p class="mb-2"><strong>Уровень 4:</strong> Числа 1–20, разложение для перехода через 10.</p>
         <p class="mb-2"><strong>Уровень 5:</strong> Три числа, разложение второго числа, сложение/вычитание.</p>
+        <p class="mb-2"><strong>Магазин:</strong> Покупай бонусы за ⭐: +10 HP, Подсказка кота, Эмоции героя, Новые герои!</p>
+        <p class="mb-2"><strong>Подсказки:</strong> После 2 ошибок котик покажет ответ, но это стоит 1 ⭐ и 5 HP.</p>
         <p class="mb-2"><strong>Статистика:</strong></p>
         <p>Правильных ответов: <span id="correct-stats">0</span></p>
         <p>Неправильных ответов: <span id="incorrect-stats">0</span></p>
         <p>Максимум звёзд: <span id="max-stars-stats">0</span></p>
         <p class="mt-4"><strong>Новая игра:</strong> Введите код <code>250989</code> и нажмите "Ввод" для сброса прогресса.</p>
+      </div>
+    </div>
+    <div id="shop-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white p-6 rounded-lg max-w-md w-full">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-2xl font-bold">Магазин ⭐</h2>
+          <span id="shop-close" class="text-xl cursor-pointer">✖</span>
+        </div>
+        <div id="shop-items" class="grid grid-cols-2 gap-4">
+          <!-- Регулируйте цены здесь: data-item и текст (например, 20 ⭐) -->
+          <button class="bg-yellow-400 hover:bg-yellow-500 p-4 rounded-lg text-center" data-item="hp">
+            <span class="text-2xl">❤️</span><br>+10 HP<br>20 ⭐
+          </button>
+          <button class="bg-yellow-400 hover:bg-yellow-500 p-4 rounded-lg text-center" data-item="hint">
+            <span class="text-2xl">💡</span><br>Подсказка<br>15 ⭐
+          </button>
+          <button class="bg-yellow-400 hover:bg-yellow-500 p-4 rounded-lg text-center" data-item="emotion">
+            <span class="text-2xl">🌟</span><br>Эмоции героя<br>40 ⭐
+          </button>
+          <button class="bg-yellow-400 hover:bg-yellow-500 p-4 rounded-lg text-center" data-item="emotion2">
+            <span class="text-2xl">✨</span><br>Эмоции героя 2<br>50 ⭐
+          </button>
+          <button class="bg-yellow-400 hover:bg-yellow-500 p-4 rounded-lg text-center" data-item="hero-lion">
+            <span class="text-2xl">🦁</span><br>Герой: Лев<br>30 ⭐
+          </button>
+          <button class="bg-yellow-400 hover:bg-yellow-500 p-4 rounded-lg text-center" data-item="hero-panda">
+            <span class="text-2xl">🐼</span><br>Герой: Панда<br>30 ⭐
+          </button>
+          <button class="bg-yellow-400 hover:bg-yellow-500 p-4 rounded-lg text-center" data-item="hero-unicorn">
+            <span class="text-2xl">🦄</span><br>Герой: Единорог<br>30 ⭐
+          </button>
+          <button class="bg-yellow-400 hover:bg-yellow-500 p-4 rounded-lg text-center" data-item="hero-princess">
+            <span class="text-2xl">👸</span><br>Герой: Принцесса<br>30 ⭐
+          </button>
+          <button class="bg-yellow-400 hover:bg-yellow-500 p-4 rounded-lg text-center" data-item="hero-scorpion">
+            <span class="text-2xl">🦂</span><br>Герой: Скорпион<br>30 ⭐
+          </button>
+          <button class="bg-yellow-400 hover:bg-yellow-500 p-4 rounded-lg text-center" data-item="hero-merlin">
+            <span class="text-2xl">🧙</span><br>Герой: Мерлин<br>30 ⭐
+          </button>
+        </div>
       </div>
     </div>
     <div id="avatar-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -45,17 +89,19 @@
       <span class="text-2xl">⭐</span>
       <span id="star-number" class="text-xl font-bold">0</span>
     </div>
-    <div class="flex items-center justify-center mb-4">
+    <div class="flex items-center justify-center mb-4 relative">
+      <div id="hint" class="hidden text-xl font-bold text-blue-600 absolute" style="left: calc(50% - 200px); text-align: left; max-width: 120px;"></div>
       <div id="cat" class="text-6xl mr-4">😺</div>
-      <div id="crit-counter" class="text-xl font-bold">😸 0/7</div>
+      <div id="emotion" class="absolute text-3xl hidden"></div>
+      <div id="crit-counter" class="text-xl font-bold">⚡ 0/7</div>
     </div>
     <div id="example" class="text-4xl font-bold mb-4" style="font-size: 36px;"></div>
     <div class="flex items-center justify-center w-full mt-8 mb-4">
       <div class="flex flex-col items-center mr-4">
-        <div id="enemy" class="text-4xl mb-2">🦁</div>
+        <div id="enemy" class="text-4xl mb-2">🦝</div>
         <div id="enemy-hp" class="w-20 h-4 bg-gray-300 rounded-full overflow-hidden relative">
           <div id="enemy-hp-bar" class="h-full bg-red-500" style="width: 100%;"></div>
-          <span id="enemy-hp-text" class="absolute inset-0 text-xs text-white font-bold flex items-center justify-center">80/80</span>
+          <span id="enemy-hp-text" class="absolute inset-0 text-white text-sm font-bold flex items-center justify-center">80/80</span>
         </div>
       </div>
       <div id="answer" class="text-2xl mx-4 w-32 text-center">Ответ: </div>
@@ -63,7 +109,7 @@
         <div id="player" class="text-4xl mb-2">🐶</div>
         <div id="player-hp" class="w-20 h-4 bg-gray-300 rounded-full overflow-hidden relative">
           <div id="player-hp-bar" class="h-full bg-green-500" style="width: 100%;"></div>
-          <span id="player-hp-text" class="absolute inset-0 text-xs text-white font-bold flex items-center justify-center">100/100</span>
+          <span id="player-hp-text" class="absolute inset-0 text-white text-sm font-bold flex items-center justify-center">100/100</span>
         </div>
       </div>
     </div>
@@ -78,16 +124,15 @@
       <button class="bg-yellow-400 hover:bg-yellow-500 text-3xl font-bold p-4 rounded-lg transition-transform transform hover:scale-105">8</button>
       <button class="bg-yellow-400 hover:bg-yellow-500 text-3xl font-bold p-4 rounded-lg transition-transform transform hover:scale-105">9</button>
       <button class="bg-yellow-400 hover:bg-yellow-500 text-3xl font-bold p-4 rounded-lg transition-transform transform hover:scale-105">0</button>
-      <button id="submit"
-        class="bg-green-500 hover:bg-green-600 text-white text-xl font-bold p-6 rounded-lg transition-transform transform hover:scale-105 flex justify-center items-center">Ввод</button>
-      <button id="clear"
-        class="bg-red-500 hover:bg-red-600 text-white text-xl font-bold p-6 rounded-lg transition-transform transform hover:scale-105 flex justify-center items-center">Очистить</button>
+      <button id="submit" class="bg-green-500 hover:bg-green-600 text-white text-2xl font-bold p-6 rounded-lg transition-transform transform hover:scale-105 flex justify-center items-center">Ввод</button>
+      <button id="clear" class="bg-red-500 hover:bg-red-600 text-white text-xl font-bold p-6 rounded-lg transition-transform transform hover:scale-105 flex justify-center items-center">Очистить</button>
     </div>
   </div>
 
   <script>
     let level = 1;
     let example = {};
+    let examplesByLevel = JSON.parse(localStorage.getItem('examplesByLevel')) || {};
     let answer = '';
     let codeInput = '';
     let stars = parseInt(localStorage.getItem('stars')) || 0;
@@ -98,20 +143,34 @@
     let enemyHPMultiplier = parseFloat(localStorage.getItem('enemyHPMultiplier')) || 1.0;
     let currentEnemyIndex = parseInt(localStorage.getItem('currentEnemyIndex')) || 0;
     let playerAvatar = localStorage.getItem('playerAvatar') || '🐶';
+    let catAvatar = localStorage.getItem('catAvatar') || '😺';
     let correctAnswers = parseInt(localStorage.getItem('correctAnswers')) || 0;
     let incorrectAnswers = parseInt(localStorage.getItem('incorrectAnswers')) || 0;
     let maxStars = parseInt(localStorage.getItem('maxStars')) || 0;
-    const playerAvatars = ['🐶', '🐱', '🐰', '🦝', '🐸'];
+    let incorrectAttempts = 0;
+    let emotionMode = localStorage.getItem('emotionMode') === 'true';
+    let emotionSet = parseInt(localStorage.getItem('emotionSet')) || 0; // 0: без эмоций, 1: первый набор, 2: второй
+    const playerAvatars = ['🦸‍♂️', '🦸', '🐰', '🦝', '🐇', '🕷️', '👸', '🦖'];
+    // Добавляйте новых героев в catHeroes
+    const catHeroes = ['😺', '🦁', '🐼', '🦄', '👸', '🦂', '🧙'];
     const enemies = [
-      { emoji: '🦁', baseHP: 80 },
+      { emoji: '🦝', baseHP: 80 },
       { emoji: '🐺', baseHP: 100 },
       { emoji: '🐻', baseHP: 120 },
       { emoji: '🦊', baseHP: 90 },
       { emoji: '🐍', baseHP: 150 }
     ];
 
-    function debugLog(action) {
-      console.log(`[${action}] Player HP: ${playerHP}, Enemy: ${enemies[currentEnemyIndex].emoji} HP: ${enemyHP}/${Math.round(enemies[currentEnemyIndex].baseHP * enemyHPMultiplier)}, Damage: ${action === 'Correct' ? (correctCount >= 7 ? 2 * (10 + 5 * level) : 10 + 5 * level) : 10}, Enemy Index: ${currentEnemyIndex}, Multiplier: ${enemyHPMultiplier.toFixed(1)}, Stars: ${stars}, Correct: ${correctAnswers}, Incorrect: ${incorrectAnswers}, Max Stars: ${maxStars}`);
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
     }
 
     function generateExample() {
@@ -121,6 +180,7 @@
         op1 = Math.random() > 0.5 ? '+' : '-';
         num2 = Math.floor(Math.random() * (op1 === '-' ? num1 : 10 - num1 + 1)) + 1;
         result = op1 === '+' ? num1 + num2 : num1 - num2;
+        if (op1 === '+' && result > 10) return generateExample();
       } else if (level === 2) {
         num1 = Math.floor(Math.random() * 20) + 1;
         op1 = Math.random() > 0.5 ? '+' : '-';
@@ -133,9 +193,11 @@
         op1 = Math.random() > 0.5 ? '+' : '-';
         num2 = Math.floor(Math.random() * (op1 === '-' ? num1 : 10)) + 1;
         const tempResult = op1 === '+' ? num1 + num2 : num1 - num2;
-        if (tempResult < 0) return generateExample();
+        if (tempResult < 0 || tempResult > 20) return generateExample();
         num3 = Math.floor(Math.random() * 10) + 1;
         op2 = Math.random() > 0.5 ? '+' : '-';
+        if (op2 === '+' && tempResult + num3 > 10) return generateExample();
+        if (op2 === '-' && tempResult - num3 < 0) return generateExample();
         result = op2 === '+' ? tempResult + num3 : tempResult - num3;
         if (result > 20) return generateExample();
         decomposition = decomposeNumber(num2, op1, num1);
@@ -165,8 +227,11 @@
           const part2 = Math.floor(Math.random() * (10 - part1)) + 1;
           num2 = part1 + part2;
           const tempResult = num1 - num2;
+          if (tempResult > 20) return generateExample();
           num3 = Math.floor(Math.random() * 10) + 1;
           op2 = Math.random() > 0.5 ? '+' : '-';
+          if (op2 === '+' && tempResult + num3 > 10) return generateExample();
+          if (op2 === '-' && tempResult - num3 < 0) return generateExample();
           result = op2 === '+' ? tempResult + num3 : tempResult - num3;
         } else {
           num1 = Math.floor(Math.random() * 9) + 1;
@@ -174,8 +239,11 @@
           const part2 = Math.floor(Math.random() * (10 - part1)) + 1;
           num2 = part1 + part2;
           const tempResult = num1 + num2;
+          if (tempResult > 20) return generateExample();
           num3 = Math.floor(Math.random() * 10) + 1;
           op2 = Math.random() > 0.5 ? '+' : '-';
+          if (op2 === '+' && tempResult + num3 > 10) return generateExample();
+          if (op2 === '-' && tempResult - num3 < 0) return generateExample();
           result = op2 === '+' ? tempResult + num3 : tempResult - num3;
         }
         if (result > 20) return generateExample();
@@ -242,6 +310,101 @@
       });
     }
 
+    function showEmotion(emoji, isCorrect, isCrit) {
+      if (emotionSet === 0) return;
+      const emotionDiv = document.getElementById('emotion');
+      // Выбор смайлов в зависимости от набора
+      const emotions = emotionSet === 1 ?
+        { incorrect: '💧', correct: '🌟', crit: '❤️' } :
+        { incorrect: '💦', correct: '✨', crit: '💖' };
+      emotionDiv.textContent = emoji === 'incorrect' ? emotions.incorrect :
+                              emoji === 'correct' ? emotions.correct : emotions.crit;
+      emotionDiv.classList.remove('hidden');
+
+      const cat = document.getElementById('cat');
+      const catRect = cat.getBoundingClientRect();
+      const container = cat.parentNode;
+      const containerRect = container.getBoundingClientRect();
+
+      const left = catRect.left - containerRect.left + (catRect.width / 2) - (emotionDiv.offsetWidth / 2) + 35;
+      const top = catRect.top - containerRect.top - emotionDiv.offsetHeight + 25;
+
+      emotionDiv.style.left = `${left}px`;
+      emotionDiv.style.top = `${top}px`;
+
+      // Эффектные анимации: вращение, тень, кривая
+      gsap.fromTo('#emotion', 
+        { y: 0, scale: 1, opacity: 1, rotation: 0 }, 
+        {
+          y: -50,
+          x: isCorrect ? 20 : -20, // Смещение вправо/влево
+          scale: emoji === 'crit' ? 2 : 1.5,
+          rotation: isCrit ? 360 : 180, // Вращение для крита
+          opacity: 0,
+          duration: 1.2,
+          ease: 'power3.out',
+          filter: 'drop-shadow(0 0 10px rgba(255, 255, 0, 0.8))', // Тень
+          onComplete: () => {
+            emotionDiv.classList.add('hidden');
+            gsap.set('#emotion', { filter: 'none' });
+          }
+        }
+      );
+
+      // Анимации кота
+      if (isCorrect) {
+        gsap.to('#cat', {
+          scale: 1.2,
+          duration: 0.5,
+          yoyo: true,
+          repeat: 1,
+          onComplete: () => gsap.set('#cat', { scale: 1 })
+        });
+      } else if (isCrit) {
+        gsap.to('#cat', {
+          scale: 1.5,
+          rotation: 360,
+          duration: 1,
+          ease: 'elastic',
+          onComplete: () => gsap.set('#cat', { scale: 1, rotation: 0 })
+        });
+      } else {
+        gsap.to('#cat', {
+          x: -15,
+          rotation: 5,
+          duration: 0.2,
+          yoyo: true,
+          repeat: 3,
+          onComplete: () => gsap.set('#cat', { x: 0, rotation: 0 })
+        });
+      }
+    }
+
+    function showHint() {
+      const hintDiv = document.getElementById('hint');
+      hintDiv.innerHTML = `💡 Ответ:<br><div class="text-center">${example.result}</div>`;
+      hintDiv.classList.remove('hidden');
+      gsap.fromTo('#hint', { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5, ease: 'bounce' });
+      setTimeout(() => {
+        gsap.to('#hint', { opacity: 0, y: 20, duration: 0.5, onComplete: () => {
+          hintDiv.classList.add('hidden');
+        }});
+      }, 5000);
+      stars = Math.max(0, stars - 1);
+      playerHP = Math.max(0, playerHP - 5);
+      localStorage.setItem('stars', stars);
+      localStorage.setItem('playerHP', playerHP);
+      document.getElementById('star-number').textContent = stars;
+      document.getElementById('player-hp-bar').style.width = `${playerHP}%`;
+      document.getElementById('player-hp-text').textContent = `${playerHP}/100`;
+      if (playerHP <= 0) resetGame();
+    }
+
+    function updateHPText() {
+      document.getElementById('enemy-hp-text').textContent = `${enemyHP}/${Math.round(enemies[currentEnemyIndex].baseHP * enemyHPMultiplier)}`;
+      document.getElementById('player-hp-text').textContent = `${playerHP}/100`;
+    }
+
     function resetGame() {
       localStorage.setItem('maxStars', maxStars);
       stars = 0;
@@ -253,6 +416,11 @@
       enemyHPMultiplier = 1.0;
       correctAnswers = 0;
       incorrectAnswers = 0;
+      incorrectAttempts = 0;
+      emotionMode = false;
+      emotionSet = 0; // Сбрасываем набор эмоций
+      catAvatar = '😺';
+      examplesByLevel = {};
       localStorage.setItem('stars', stars);
       localStorage.setItem('playerHP', playerHP);
       localStorage.setItem('enemyHP', enemyHP);
@@ -260,17 +428,21 @@
       localStorage.setItem('enemyHPMultiplier', enemyHPMultiplier);
       localStorage.setItem('correctAnswers', correctAnswers);
       localStorage.setItem('incorrectAnswers', incorrectAnswers);
+      localStorage.setItem('emotionMode', emotionMode);
+      localStorage.setItem('emotionSet', emotionSet);
+      localStorage.setItem('catAvatar', catAvatar);
+      localStorage.setItem('examplesByLevel', JSON.stringify(examplesByLevel));
       document.getElementById('enemy').textContent = enemies[currentEnemyIndex].emoji;
+      document.getElementById('cat').textContent = catAvatar;
       document.getElementById('star-number').textContent = '0';
-      document.getElementById('crit-counter').textContent = '😸 0/7';
+      document.getElementById('crit-counter').textContent = '⚡ 0/7';
       document.getElementById('player-hp-bar').style.width = '100%';
-      document.getElementById('player-hp-text').textContent = '100/100';
       document.getElementById('enemy-hp-bar').style.width = '100%';
-      document.getElementById('enemy-hp-text').textContent = `${enemyHP}/${Math.round(enemies[currentEnemyIndex].baseHP * enemyHPMultiplier)}`;
-      document.getElementById('cat').textContent = '😺';
+      document.getElementById('cat').textContent = catAvatar;
       document.getElementById('correct-stats').textContent = correctAnswers;
       document.getElementById('incorrect-stats').textContent = incorrectAnswers;
       document.getElementById('max-stars-stats').textContent = maxStars;
+      updateHPText();
       gsap.to('#cat', {
         scale: 1.5,
         rotation: 360,
@@ -281,7 +453,6 @@
       codeInput = '';
       answer = '';
       document.getElementById('answer').textContent = 'Ответ: ';
-      debugLog('Reset');
       const avatarModal = document.getElementById('avatar-modal');
       const avatarOptions = document.getElementById('avatar-options');
       avatarOptions.innerHTML = '';
@@ -302,7 +473,14 @@
     }
 
     function updateExample() {
-      example = generateExample();
+      if (examplesByLevel[level]) {
+        example = examplesByLevel[level];
+      } else {
+        example = generateExample();
+        examplesByLevel[level] = example;
+        localStorage.setItem('examplesByLevel', JSON.stringify(examplesByLevel));
+      }
+      incorrectAttempts = 0;
       const exampleDiv = document.getElementById('example');
       exampleDiv.innerHTML = `
         ${example.num1} ${example.op1} <span id="num2" class="inline-block ${example.decomposition ? 'text-gray-400' : 'text-black'}">${example.num2}</span>
@@ -329,35 +507,41 @@
       }
       positionBrace();
       if (level >= 2 && example.decomposition) {
-        gsap.fromTo('#brace', { scaleY: 0, opacity: 0 }, { scaleY: 1.2, opacity: 1, duration: 0.5, ease: 'bounce' });
-        gsap.fromTo('.decomp', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, delay: 0.3 });
+        requestAnimationFrame(() => {
+          gsap.fromTo('#brace', { scaleY: 0, opacity: 0 }, { scaleY: 1.2, opacity: 1, duration: 0.5, ease: 'bounce' });
+          gsap.fromTo('.decomp', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.5, delay: 0.1 });
+        });
       }
     }
 
     function positionBrace() {
       if (level === 1 || !example.decomposition) return;
-      const num2 = document.getElementById('num2');
-      const exampleDiv = document.getElementById('example');
-      const brace = document.getElementById('brace');
-      const decomp1 = document.getElementById('decomp1');
-      const decomp2 = document.getElementById('decomp2');
-      const num2Rect = num2.getBoundingClientRect();
-      const exampleRect = exampleDiv.getBoundingClientRect();
-      const svgWidth = 120;
-      const exampleLeft = (window.innerWidth - exampleRect.width) / 2;
-      const num2CenterX = num2Rect.left + num2Rect.width;
-      const adjustment = num2.textContent.length > 1 && window.innerWidth < 640 ? -7 : num2.textContent.length > 1 ? -5 : 0;
-      const svgLeft = num2CenterX + adjustment - svgWidth / 2;
-      brace.style.left = `${svgLeft}px`;
-      const num2Top = num2Rect.top;
-      const desiredTop = num2Top + 50;
-      brace.style.top = `${desiredTop - 20.4}px`;
-      const braceRect = brace.getBoundingClientRect();
-      decomp1.style.left = `${braceRect.left + 30}px`;
-      decomp2.style.left = `${braceRect.left + 78}px`;
-      decomp1.style.top = `${braceRect.top + 48}px`;
-      decomp2.style.top = `${braceRect.top + 48}px`;
+      requestAnimationFrame(() => {
+        const num2 = document.getElementById('num2');
+        const exampleDiv = document.getElementById('example');
+        const brace = document.getElementById('brace');
+        const decomp1 = document.getElementById('decomp1');
+        const decomp2 = document.getElementById('decomp2');
+        const num2Rect = num2.getBoundingClientRect();
+        const exampleRect = exampleDiv.getBoundingClientRect();
+        const svgWidth = 120;
+        const exampleLeft = (window.innerWidth - exampleRect.width) / 2;
+        const num2CenterX = num2Rect.left + num2Rect.width;
+        const adjustment = num2.textContent.length > 1 && window.innerWidth < 640 ? -7 : num2.textContent.length > 1 ? -5 : 0;
+        const svgLeft = num2CenterX + adjustment - svgWidth / 2;
+        brace.style.left = `${svgLeft}px`;
+        const num2Top = num2Rect.top + window.scrollY;
+        const desiredTop = num2Top + 50;
+        brace.style.top = `${desiredTop - 20.4}px`;
+        const braceRect = brace.getBoundingClientRect();
+        decomp1.style.left = `${braceRect.left + 30}px`;
+        decomp2.style.left = `${braceRect.left + 78}px`;
+        decomp1.style.top = `${braceRect.top + window.scrollY + 48}px`;
+        decomp2.style.top = `${braceRect.top + window.scrollY + 48}px`;
+      });
     }
+
+    const debouncedPositionBrace = debounce(positionBrace, 16);
 
     document.getElementById('faq-button').addEventListener('click', () => {
       document.getElementById('faq-modal').classList.toggle('hidden');
@@ -366,16 +550,89 @@
       document.getElementById('faq-modal').classList.add('hidden');
     });
 
+    document.getElementById('shop-button').addEventListener('click', () => {
+      document.getElementById('shop-modal').classList.toggle('hidden');
+    });
+    document.getElementById('shop-close').addEventListener('click', () => {
+      document.getElementById('shop-modal').classList.add('hidden');
+    });
+
+    document.getElementById('shop-items').addEventListener('click', (event) => {
+      if (event.target.tagName !== 'BUTTON') return;
+      const item = event.target.dataset.item;
+      // Регулируйте цены здесь: задавайте cost для каждого item
+      let cost = 0;
+      if (item === 'hp') cost = 20;
+      else if (item === 'hint') cost = 15;
+      else if (item === 'emotion') cost = 40;
+      else if (item === 'emotion2') cost = 50;
+      else if (item.startsWith('hero-')) cost = 30;
+      if (stars < cost) {
+        gsap.to('#shop-modal', { x: 10, duration: 0.1, yoyo: true, repeat: 5 });
+        return;
+      }
+      stars -= cost;
+      localStorage.setItem('stars', stars);
+      document.getElementById('star-number').textContent = stars;
+      if (item === 'hp') {
+        playerHP = Math.min(100, playerHP + 10);
+        localStorage.setItem('playerHP', playerHP);
+        document.getElementById('player-hp-bar').style.width = `${playerHP}%`;
+        document.getElementById('player-hp-text').textContent = `${playerHP}/100`;
+        showBonus('player', 10, 'green');
+      } else if (item === 'hint') {
+        showHint();
+      } else if (item === 'emotion') {
+        emotionMode = true;
+        emotionSet = 1; // Первый набор эмоций
+        localStorage.setItem('emotionMode', emotionMode);
+        localStorage.setItem('emotionSet', emotionSet);
+      } else if (item === 'emotion2') {
+        emotionMode = true;
+        emotionSet = 2; // Второй набор эмоций
+        localStorage.setItem('emotionMode', emotionMode);
+        localStorage.setItem('emotionSet', emotionSet);
+      } else if (item === 'hero-lion') {
+        catAvatar = '🦁';
+        localStorage.setItem('catAvatar', catAvatar);
+        document.getElementById('cat').textContent = catAvatar;
+      } else if (item === 'hero-panda') {
+        catAvatar = '🐼';
+        localStorage.setItem('catAvatar', catAvatar);
+        document.getElementById('cat').textContent = catAvatar;
+      } else if (item === 'hero-unicorn') {
+        catAvatar = '🦄';
+        localStorage.setItem('catAvatar', catAvatar);
+        document.getElementById('cat').textContent = catAvatar;
+      } else if (item === 'hero-princess') {
+        catAvatar = '👸';
+        localStorage.setItem('catAvatar', catAvatar);
+        document.getElementById('cat').textContent = catAvatar;
+      } else if (item === 'hero-scorpion') {
+        catAvatar = '🦂';
+        localStorage.setItem('catAvatar', catAvatar);
+        document.getElementById('cat').textContent = catAvatar;
+      } else if (item === 'hero-merlin') {
+        catAvatar = '🧙';
+        localStorage.setItem('catAvatar', catAvatar);
+        document.getElementById('cat').textContent = catAvatar;
+      }
+      gsap.to(event.target, { scale: 1.2, duration: 0.3, yoyo: true, repeat: 1 });
+      document.getElementById('shop-modal').classList.add('hidden');
+    });
+
     document.getElementById('input-buttons').addEventListener('click', (event) => {
       if (event.target.tagName !== 'BUTTON') return;
       const value = event.target.textContent;
       if (value === 'Ввод') {
+        if (answer === '') return;
         if (codeInput === '250989') {
           resetGame();
         } else if (!isNaN(parseInt(answer)) && parseInt(answer) === example.result) {
           streak++;
           correctCount++;
           correctAnswers++;
+          incorrectAttempts = 0;
           localStorage.setItem('correctAnswers', correctAnswers);
           document.getElementById('correct-stats').textContent = correctAnswers;
           const damage = correctCount >= 7 ? 2 * (10 + 5 * level) : 10 + 5 * level;
@@ -383,16 +640,22 @@
           let starReward = level <= 2 ? 1 : level <= 4 ? 2 : 3;
           if (correctCount >= 7) {
             starReward += 5;
-            gsap.to('#cat', {
-              scale: 1.5,
-              rotation: 360,
-              duration: 1,
-              ease: 'elastic',
-              onComplete: () => gsap.set('#cat', { scale: 1, rotation: 0 })
-            });
+            if (emotionMode) {
+              showEmotion('crit', false, true);
+            } else {
+              gsap.to('#cat', {
+                scale: 1.5,
+                rotation: 360,
+                duration: 1,
+                ease: 'elastic',
+                onComplete: () => gsap.set('#cat', { scale: 1, rotation: 0 })
+              });
+            }
             correctCount = 0;
+          } else if (emotionMode) {
+            showEmotion('correct', true, false);
           }
-          document.getElementById('crit-counter').textContent = `😸 ${correctCount}/7`;
+          document.getElementById('crit-counter').textContent = `⚡ ${correctCount}/7`;
           enemyHP = Math.max(0, enemyHP - damage);
           localStorage.setItem('enemyHP', enemyHP);
           document.getElementById('enemy-hp-bar').style.width = `${(enemyHP / (enemies[currentEnemyIndex].baseHP * enemyHPMultiplier)) * 100}%`;
@@ -408,15 +671,6 @@
             onComplete: () => gsap.set('#enemy', { x: 0, y: 0, scale: 1, rotation: 0 })
           });
           showDamage('enemy', damage, color);
-          document.getElementById('cat').textContent = '😸';
-          gsap.to('#cat', {
-            y: -30,
-            scale: 1.2,
-            duration: 0.5,
-            yoyo: true,
-            repeat: 1,
-            onComplete: () => gsap.set('#cat', { y: 0, scale: 1 })
-          });
           stars += starReward;
           maxStars = Math.max(maxStars, stars);
           localStorage.setItem('stars', stars);
@@ -449,21 +703,22 @@
               localStorage.setItem('maxStars', maxStars);
               document.getElementById('star-number').textContent = stars;
               document.getElementById('max-stars-stats').textContent = maxStars;
-              debugLog('Cycle');
             }
           }
-          debugLog('Correct');
           answer = '';
           codeInput = '';
           document.getElementById('answer').textContent = 'Ответ: ';
+          delete examplesByLevel[level];
+          localStorage.setItem('examplesByLevel', JSON.stringify(examplesByLevel));
           updateExample();
         } else {
+          incorrectAttempts++;
           streak = 0;
           correctCount = 0;
           incorrectAnswers++;
           localStorage.setItem('incorrectAnswers', incorrectAnswers);
           document.getElementById('incorrect-stats').textContent = incorrectAnswers;
-          document.getElementById('crit-counter').textContent = `😸 ${correctCount}/7`;
+          document.getElementById('crit-counter').textContent = `⚡ ${correctCount}/7`;
           const damage = 10;
           playerHP = Math.max(0, playerHP - damage);
           localStorage.setItem('playerHP', playerHP);
@@ -479,26 +734,22 @@
             repeat: 6,
             onComplete: () => gsap.set('#player', { x: 0, y: 0, scale: 1, rotation: 0 })
           });
-          showDamage('player', damage, 'purple');
-          document.getElementById('cat').textContent = '😿';
-          gsap.to('#cat', {
-            x: -15,
-            rotation: 5,
-            duration: 0.2,
-            yoyo: true,
-            repeat: 3,
-            onComplete: () => gsap.set('#cat', { x: 0, rotation: 0 })
-          });
+          showDamage('player', 10, 'purple');
+          if (emotionMode) {
+            showEmotion('incorrect', false, false);
+          }
           stars = Math.max(0, stars - 1);
           maxStars = Math.max(maxStars, stars);
           localStorage.setItem('stars', stars);
           localStorage.setItem('maxStars', maxStars);
           document.getElementById('star-number').textContent = stars;
           document.getElementById('max-stars-stats').textContent = maxStars;
+          if (incorrectAttempts >= 2) {
+            showHint();
+          }
           if (playerHP <= 0) {
             resetGame();
           }
-          debugLog('Incorrect');
           answer = '';
           codeInput = '';
           document.getElementById('answer').textContent = 'Ответ: ';
@@ -516,7 +767,9 @@
 
     document.getElementById('level-buttons').addEventListener('click', (event) => {
       if (event.target.tagName !== 'BUTTON') return;
-      level = parseInt(event.target.dataset.level);
+      const newLevel = parseInt(event.target.dataset.level);
+      if (newLevel === level) return;
+      level = newLevel;
       document.querySelectorAll('#level-buttons button').forEach(btn => {
         btn.classList.remove('bg-blue-600');
         btn.classList.add('bg-blue-400');
@@ -529,56 +782,24 @@
       updateExample();
     });
 
-    function updateButtonLayout() {
-      const container = document.getElementById('level-buttons');
-      const buttons = container.querySelectorAll('button');
-      const containerWidth = container.getBoundingClientRect().width;
-      const buttonWidth = buttons[0].getBoundingClientRect().width;
-      const gap = 16;
-      const maxButtonsPerRow = Math.floor((containerWidth + gap) / (buttonWidth + gap));
-      container.classList.remove('grid-cols-1', 'grid-cols-2', 'grid-cols-4', 'grid-cols-5');
-      buttons.forEach(btn => {
-        btn.classList.remove('col-span-2', 'col-span-1');
-      });
-      if (buttons.length === 4) {
-        if (window.innerWidth < 640) {
-          container.classList.add('grid-cols-2');
-          buttons[2].classList.add('col-span-2');
-          buttons[3].classList.add('col-span-2');
-        } else {
-          container.classList.add('grid-cols-4');
-        }
-      } else if (buttons.length === 5) {
-        if (window.innerWidth < 640) {
-          container.classList.add('grid-cols-2');
-          buttons[4].classList.add('col-span-2');
-        } else {
-          container.classList.add('grid-cols-5');
-        }
-      }
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
+      if (!localStorage.getItem('playerAvatar')) resetGame();
       document.getElementById('star-number').textContent = stars;
       document.getElementById('enemy').textContent = enemies[currentEnemyIndex].emoji;
-      document.getElementById('crit-counter').textContent = '😸 0/7';
+      document.getElementById('cat').textContent = catAvatar;
+      document.getElementById('crit-counter').textContent = '⚡ 0/7';
       document.getElementById('player').textContent = playerAvatar;
       document.getElementById('player-hp-bar').style.width = `${playerHP}%`;
-      document.getElementById('player-hp-text').textContent = `${playerHP}/100`;
       document.getElementById('enemy-hp-bar').style.width = `${(enemyHP / (enemies[currentEnemyIndex].baseHP * enemyHPMultiplier)) * 100}%`;
-      document.getElementById('enemy-hp-text').textContent = `${enemyHP}/${Math.round(enemies[currentEnemyIndex].baseHP * enemyHPMultiplier)}`;
       document.getElementById('correct-stats').textContent = correctAnswers;
       document.getElementById('incorrect-stats').textContent = incorrectAnswers;
       document.getElementById('max-stars-stats').textContent = maxStars;
+      updateHPText();
       updateExample();
-      updateButtonLayout();
-      debugLog('Init');
     });
 
-    window.addEventListener('resize', () => {
-      positionBrace();
-      updateButtonLayout();
-    });
+    window.addEventListener('resize', debouncedPositionBrace);
+    window.addEventListener('scroll', debouncedPositionBrace);
   </script>
 </body>
 </html>
